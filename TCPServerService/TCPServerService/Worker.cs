@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Sockets;
 using TCPServerService.State;
 using System.Text;
+using TCPServerService.Helper; 
+
 namespace TCPServerService;
 
 
@@ -20,10 +22,10 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("TCP Server is starting...");
+        _logger.LogInformation("TCP Server is starting");
         TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 5000);
         server.Start();
-        _logger.LogInformation("Server is listening on port 5000...");
+        _logger.LogInformation("Server is listening on port 5000");
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -41,7 +43,7 @@ public class Worker : BackgroundService
                             byte[] buffer = new byte[1024];
                             int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length, stoppingToken);
                             
-                            if (bytesRead == 0) // If no data is read, break and wait for next connection
+                            if (bytesRead == 0) 
                                 break;
                             
                             string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);

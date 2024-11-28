@@ -14,13 +14,13 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("TCP Client is starting...");
+        _logger.LogInformation("TCP Client is starting");
 
         try
         {
             using (var client = new TcpClient())
             {
-                _logger.LogInformation("Connecting to server...");
+                _logger.LogInformation("Connecting to server");
                 await client.ConnectAsync("127.0.0.1", 5000, stoppingToken);
                 _logger.LogInformation("Connected to server.");
 
@@ -43,7 +43,8 @@ public class Worker : BackgroundService
                                 }
 
                                 string response = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                                Console.WriteLine($"\r\nServer({message}, {DateTimeOffset.Now}): {response}");
+                                //Server(rsponse for which message,when response received):response
+                                Console.WriteLine($"\r\nServer({message}, {DateTimeOffset.Now}): {response}"); 
                             }
                             catch (Exception ex)
                             {
@@ -62,13 +63,13 @@ public class Worker : BackgroundService
 
                             if (string.IsNullOrWhiteSpace(message))
                             {
-                                _logger.LogInformation("Empty message, exiting...");
+                                _logger.LogInformation("Empty message, exiting");
                                 break;
                             }
 
                             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
                             await stream.WriteAsync(messageBytes, 0, messageBytes.Length, stoppingToken);
-                            await stream.FlushAsync(stoppingToken); // Ensure immediate sending
+                            await stream.FlushAsync(stoppingToken);
                         }
                         catch (Exception ex)
                         {
@@ -77,7 +78,7 @@ public class Worker : BackgroundService
                         }
                     }
 
-                    await receivingTask; // Wait for the receiving task to finish
+                    await receivingTask;
                 }
             }
         }

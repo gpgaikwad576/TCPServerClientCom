@@ -1,10 +1,11 @@
 using ClientService;
+using ClientService.Helper;
 using Microsoft.Extensions.Logging;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-// Remove default logging providers and configure custom logging
-builder.Logging.ClearProviders(); // Removes all default logging providers
+
+builder.Logging.ClearProviders();
 builder.Logging.AddConsole(options =>
 {
     options.LogToStandardErrorThreshold = LogLevel.Critical; // Logs only Critical messages

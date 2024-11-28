@@ -6,8 +6,7 @@ namespace TCPServerService.State
     public class DataState : IEnumerable<KeyValuePair<string, List<Dictionary<string, int>>>>
     {
         public readonly Dictionary<string, List<Dictionary<string, int>>> _data;
-
-        // Constructor to initialize with default values
+        
         public DataState()
         {
             _data = new Dictionary<string, List<Dictionary<string, int>>>
