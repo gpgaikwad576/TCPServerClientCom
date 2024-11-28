@@ -1,0 +1,31 @@
+[40m[32minfo[39m[22m[49m: TCPServerService.Worker[0]
+      TCP Server is starting...
+[40m[32minfo[39m[22m[49m: TCPServerService.Worker[0]
+      Server is listening on port 5000...
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Content root path: /home/pankaj/RiderProjects/TCPServerClientCom/TCPServerService/TCPServerService
+[40m[32minfo[39m[22m[49m: TCPServerService.Worker[0]
+      Client connected!
+[40m[32minfo[39m[22m[49m: TCPServerService.Worker[0]
+      27/11/2024 11:45:34 pm +05:30Client: 
+[40m[32minfo[39m[22m[49m: TCPServerService.Worker[0]
+      Client connected!
+[40m[32minfo[39m[22m[49m: TCPServerService.Worker[0]
+      27/11/2024 11:45:43 pm +05:30Client: xss
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+[41m[30mfail[39m[22m[49m: TCPServerService.Worker[0]
+      Error in server.
+      System.OperationCanceledException: The operation was canceled.
+         at System.Threading.CancellationToken.ThrowOperationCanceledException()
+         at System.Threading.CancellationToken.ThrowIfCancellationRequested()
+         at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+         at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Net.Sockets.Socket>.GetResult(Int16 token)
+         at System.Net.Sockets.TcpListener.<AcceptTcpClientAsync>g__WaitAndWrap|32_0(ValueTask`1 task)
+         at TCPServerService.Worker.ExecuteAsync(CancellationToken stoppingToken) in /home/pankaj/RiderProjects/TCPServerClientCom/TCPServerService/TCPServerService/Worker.cs:line 27
+[40m[32minfo[39m[22m[49m: TCPServerService.Worker[0]
+      Server stopped.

@@ -1,0 +1,14 @@
+[40m[32minfo[39m[22m[49m: ClientService.Worker[0]
+      TCP Client is starting...
+[40m[32minfo[39m[22m[49m: ClientService.Worker[0]
+      Connecting to server...
+[40m[32minfo[39m[22m[49m: ClientService.Worker[0]
+      Connected to server.
+Enter message: [40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Content root path: /home/pankaj/RiderProjects/TCPServerClientCom/ClientService/ClientService
+sddfffddddffgddd[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
