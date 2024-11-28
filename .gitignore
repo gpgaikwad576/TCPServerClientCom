@@ -1,0 +1,26 @@
+# Ignore build artifacts
+/bin/
+/obj/
+
+# Ignore IDE-specific files (for JetBrains and Visual Studio)
+.idea/
+/.vscode/
+*.sln.DotSettings.user
+
+# Ignore log files
+*.log
+
+# Ignore config files with sensitive information
+appsettings.json
+appsettings.Development.json
+
+# Ignore other temp or cache files
+*.cache
+*.pdb
+*.dll
+*.exe
+
+# Ignore platform-specific files (Windows-specific, for example)
+*.user
+*.swp
+
