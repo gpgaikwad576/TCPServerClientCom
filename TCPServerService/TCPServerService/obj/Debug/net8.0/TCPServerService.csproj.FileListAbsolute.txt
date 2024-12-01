@@ -94,3 +94,4 @@
 /home/pankaj/RiderProjects/TCPServerClientCom/TCPServerService/TCPServerService/obj/Debug/net8.0/TCPServerService.pdb
 /home/pankaj/RiderProjects/TCPServerClientCom/TCPServerService/TCPServerService/obj/Debug/net8.0/TCPServerService.genruntimeconfig.cache
 /home/pankaj/RiderProjects/TCPServerClientCom/TCPServerService/TCPServerService/obj/Debug/net8.0/ref/TCPServerService.dll
+/home/pankaj/RiderProjects/TCPServerClientCom/TCPServerService/TCPServerService/obj/Debug/net8.0/TCPServerService.sourcelink.json

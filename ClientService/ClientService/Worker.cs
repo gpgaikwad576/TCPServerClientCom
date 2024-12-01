@@ -1,16 +1,37 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+
 namespace ClientService;
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
+    private const string EncryptionKey = "SimpleKey"; // Define your key here
 
     public Worker(ILogger<Worker> logger)
     {
         _logger = logger;
     }
+    
+    public static class EncryptDecrypt
+    {
+        // XOR Encryption and Decryption
+        public static string EncryptDecryptTask(string input, string key)
+        {
+            StringBuilder output = new StringBuilder();
+            int keyIndex = 0;
+
+            foreach (char c in input)
+            {
+                output.Append((char)(c ^ key[keyIndex]));
+                keyIndex = (keyIndex + 1) % key.Length;
+            }
+
+            return output.ToString();
+        }
+    }
+
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -23,10 +44,11 @@ public class Worker : BackgroundService
                 _logger.LogInformation("Connecting to server");
                 await client.ConnectAsync("127.0.0.1", 5000, stoppingToken);
                 _logger.LogInformation("Connected to server.");
-
+                string? message = "NOTHING";
+                    
                 using (var stream = client.GetStream())
                 {
-                    string? message = "EMPTY";
+                    // Separate Task for Receiving Messages
                     var receivingTask = Task.Run(async () =>
                     {
                         while (!stoppingToken.IsCancellationRequested)
@@ -42,9 +64,11 @@ public class Worker : BackgroundService
                                     break;
                                 }
 
-                                string response = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                                //Server(rsponse for which message,when response received):response
-                                Console.WriteLine($"\r\nServer({message}, {DateTimeOffset.Now}): {response}"); 
+                                string encryptedResponse = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                                string response = EncryptDecrypt.EncryptDecryptTask(encryptedResponse, EncryptionKey); // Decrypt response
+
+                                // Your requested output line
+                                Console.WriteLine($"\r\nServer({message}, {DateTimeOffset.Now}): {response}");
                             }
                             catch (Exception ex)
                             {
@@ -54,31 +78,37 @@ public class Worker : BackgroundService
                         }
                     }, stoppingToken);
 
-                    while (!stoppingToken.IsCancellationRequested)
+                    
+                    var sendingTask = Task.Run(async () =>
                     {
-                        try
+                        while (!stoppingToken.IsCancellationRequested)
                         {
-                            Console.Write("\r\nEnter message: ");
-                            message = Console.ReadLine();
-
-                            if (string.IsNullOrWhiteSpace(message))
+                            try
                             {
-                                _logger.LogInformation("Empty message, exiting");
+                                Console.Write("\r\nEnter message: ");
+                                message = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(message))
+                                {
+                                    _logger.LogInformation("Empty message, exiting");
+                                    break;
+                                }
+
+                                string encryptedMessage = EncryptDecrypt.EncryptDecryptTask(message, EncryptionKey); // Encrypt message
+                                byte[] messageBytes = Encoding.UTF8.GetBytes(encryptedMessage);
+                                await stream.WriteAsync(messageBytes, 0, messageBytes.Length, stoppingToken);
+                                await stream.FlushAsync(stoppingToken);
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex, "Error sending message to server.");
                                 break;
                             }
-
-                            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-                            await stream.WriteAsync(messageBytes, 0, messageBytes.Length, stoppingToken);
-                            await stream.FlushAsync(stoppingToken);
                         }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, "Error sending message to server.");
-                            break;
-                        }
-                    }
+                    }, stoppingToken);
 
-                    await receivingTask;
+                    // Wait for both tasks to complete
+                    await Task.WhenAll(receivingTask, sendingTask);
                 }
             }
         }

@@ -46,3 +46,4 @@
 /home/pankaj/RiderProjects/TCPServerClientCom/ClientService/ClientService/obj/Debug/net8.0/ClientService.pdb
 /home/pankaj/RiderProjects/TCPServerClientCom/ClientService/ClientService/obj/Debug/net8.0/ClientService.genruntimeconfig.cache
 /home/pankaj/RiderProjects/TCPServerClientCom/ClientService/ClientService/obj/Debug/net8.0/ref/ClientService.dll
+/home/pankaj/RiderProjects/TCPServerClientCom/ClientService/ClientService/obj/Debug/net8.0/ClientService.sourcelink.json

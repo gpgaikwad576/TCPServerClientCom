@@ -1,24 +1,40 @@
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using TCPServerService.State;
 using System.Text;
-using TCPServerService.Helper; 
 
 namespace TCPServerService;
-
-
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly DataState _dataState;
+    private const string EncryptionKey = "SimpleKey";
 
     public Worker(ILogger<Worker> logger, DataState dataState)
     {
         _logger = logger;
         _dataState = dataState;
     }
+    
+    public static class EncryptDecrypt
+    {
+        // XOR Encryption and Decryption
+        public static string EncryptDecryptTask(string input, string key)
+        {
+            StringBuilder output = new StringBuilder();
+            int keyIndex = 0;
+
+            foreach (char c in input)
+            {
+                output.Append((char)(c ^ key[keyIndex]));
+                keyIndex = (keyIndex + 1) % key.Length;
+            }
+
+            return output.ToString();
+        }
+    }
+
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -46,7 +62,8 @@ public class Worker : BackgroundService
                             if (bytesRead == 0) 
                                 break;
                             
-                            string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                            string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                            string message = EncryptDecrypt.EncryptDecryptTask(encryptedMessage, EncryptionKey); // Decrypt message
                             _logger.LogInformation($"\r\n{DateTimeOffset.Now} Client: {message}");
 
                             string response = "EMPTY";
@@ -75,7 +92,8 @@ public class Worker : BackgroundService
                                         for (int i = 0; i < noOfTimes; i++)
                                         {
                                             response = $"{DateTimeOffset.Now}";
-                                            byte[] responseBytes = Encoding.UTF8.GetBytes(response);
+                                            string encryptedResponse = EncryptDecrypt.EncryptDecryptTask(response, EncryptionKey); // Encrypt response
+                                            byte[] responseBytes = Encoding.UTF8.GetBytes(encryptedResponse);
                                             await stream.WriteAsync(responseBytes, 0, responseBytes.Length, stoppingToken);
                                             await stream.FlushAsync(stoppingToken);
 
@@ -88,7 +106,8 @@ public class Worker : BackgroundService
                             }
                             else
                             {
-                                byte[] emptyResponseBytes = Encoding.UTF8.GetBytes(response);
+                                string encryptedEmptyResponse = EncryptDecrypt.EncryptDecryptTask(response, EncryptionKey); // Encrypt empty response
+                                byte[] emptyResponseBytes = Encoding.UTF8.GetBytes(encryptedEmptyResponse);
                                 await stream.WriteAsync(emptyResponseBytes, 0, emptyResponseBytes.Length, stoppingToken);
                                 await stream.FlushAsync(stoppingToken);
                             }
